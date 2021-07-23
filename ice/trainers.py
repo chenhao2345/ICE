@@ -12,7 +12,8 @@ from .evaluation_metrics import accuracy
 
 
 class ImageTrainer(object):
-    def __init__(self, model_1, model_1_ema, num_cluster=500, alpha=0.999, num_instance=4, tau_c=0.5, tau_v=0.09, scale_kl=2.0):
+    def __init__(self, model_1, model_1_ema, num_cluster=500, alpha=0.999, num_instance=4, tau_c=0.5, tau_v=0.09,
+                 scale_kl=2.0):
         super(ImageTrainer, self).__init__()
         self.model_1 = model_1
         self.model_1_ema = model_1_ema
@@ -32,7 +33,8 @@ class ImageTrainer(object):
         self.mse = nn.MSELoss(reduction='sum')
 
     def train(self, epoch, data_loader_target,
-            optimizer, print_freq=1, train_iters=200, centers=None, intra_id_labels=None, intra_id_features=None, cams=None, all_pseudo_label=None):
+              optimizer, print_freq=1, train_iters=200, centers=None, intra_id_labels=None, intra_id_features=None,
+              cams=None, all_pseudo_label=None):
         self.model_1.train()
         self.model_1_ema.train()
         centers = centers.cuda()
@@ -80,7 +82,6 @@ class ImageTrainer(object):
                 percam_tempV.append(self.percam_memory[ii].detach().clone())
             percam_tempV = torch.cat(percam_tempV, dim=0).cuda()
 
-
         end = time.time()
         for i in range(train_iters):
             target_inputs = data_loader_target.next()
@@ -93,7 +94,7 @@ class ImageTrainer(object):
             shuffle_ids, reverse_ids = self.get_shuffle_ids(b)
 
             f_out_t1 = self.model_1(inputs_1)
-            p_out_t1 = torch.matmul(f_out_t1, centers.transpose(1,0))/self.tau_c
+            p_out_t1 = torch.matmul(f_out_t1, centers.transpose(1, 0)) / self.tau_c
 
             f_out_t2 = self.model_1(inputs_2)
 
@@ -130,8 +131,8 @@ class ImageTrainer(object):
                             torch.device('cuda'))
                         concated_target[0:len(ori_asso_ind)] = 1.0 / len(ori_asso_ind)
                         associate_loss += -1 * (
-                                    F.log_softmax(concated_input.unsqueeze(0), dim=1) * concated_target.unsqueeze(
-                                0)).sum()
+                                F.log_softmax(concated_input.unsqueeze(0), dim=1) * concated_target.unsqueeze(
+                            0)).sum()
                     loss_cam += 0.5 * associate_loss / len(percam_feat)
 
             with torch.no_grad():
@@ -150,8 +151,12 @@ class ImageTrainer(object):
             loss_ccl = self.ccloss(p_out_t1, targets)
             loss_vcl = self.vcloss(F.normalize(f_out_t1), F.normalize(f_out_t2_ema), targets)
 
-            loss_kl = self.kl(F.softmax(torch.matmul(F.normalize(f_out_t1), F.normalize(f_out_t2_ema).transpose(1,0))/self.scale_kl, dim=1).log(),
-                              F.softmax(torch.matmul(F.normalize(f_out_weak_ema), F.normalize(f_out_weak_ema).transpose(1,0))/self.scale_kl, dim=1))*10
+            loss_kl = self.kl(F.softmax(
+                torch.matmul(F.normalize(f_out_t1), F.normalize(f_out_t2_ema).transpose(1, 0)) / self.scale_kl,
+                dim=1).log(),
+                              F.softmax(torch.matmul(F.normalize(f_out_weak_ema),
+                                                     F.normalize(f_out_weak_ema).transpose(1, 0)) / self.scale_kl,
+                                        dim=1)) * 10
 
             loss = loss_ccl + loss_vcl + loss_cam + loss_kl
 
