@@ -1,0 +1,8 @@
+Please put your datasets in this folder.
+
+ICE/examples/data
+├── dukemtmc-reid
+│   └── DukeMTMC-reID
+├── market1501
+└── msmt17
+    └── MSMT17_V1(or MSMT17_V2)
