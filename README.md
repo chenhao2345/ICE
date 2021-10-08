@@ -3,6 +3,7 @@ This is the official PyTorch implementation of the ICCV 2021 paper
 [ICE: Inter-instance Contrastive Encoding for Unsupervised Person
 Re-identification](https://arxiv.org/pdf/2103.16364.pdf).
 
+[[Video](https://drive.google.com/file/d/1E__ru9u_oRcb44-WIH_GjBTv1-_5rcO2/view?usp=sharing)]   [[Poster](https://drive.google.com/file/d/1HEkgtUCSOixIndH1ClhRZfAQGTIFfY-n/view?usp=sharing)]
 
 ![teaser](figs/figure8.png)
 
