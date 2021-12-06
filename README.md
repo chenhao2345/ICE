@@ -45,11 +45,14 @@ python examples/unsupervised_train.py --dataset-target msmt17
 ```
 ## Citation
 If you find this project useful, please kindly star our project and cite our paper.
-```text
-@article{chen2021ice,
-  title={ICE: Inter-instance Contrastive Encoding for Unsupervised Person Re-identification},
-  author={Chen, Hao and Lagadec, Benoit and Bremond, Francois},
-  journal={arXiv preprint arXiv:2103.16364},
-  year={2021}
+```bibtex
+@InProceedings{Chen_2021_ICCV,
+    author    = {Chen, Hao and Lagadec, Benoit and Bremond, Fran\c{c}ois},
+    title     = {ICE: Inter-Instance Contrastive Encoding for Unsupervised Person Re-Identification},
+    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+    month     = {October},
+    year      = {2021},
+    pages     = {14960-14969}
 }
 ```
+
